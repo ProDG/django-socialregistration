@@ -24,8 +24,9 @@ class GithubSetup(SetupCallback):
         # workaround for the case, when user changes his username at GitHub
         try:
             old_github_profile = GithubAccessToken.objects.get(access_token=client._access_token).profile
-            old_github_profile.github = login
-            old_github_profile.save(force_update=True)
+            if old_github_profile.github != login:
+                old_github_profile.github = login
+                old_github_profile.save(force_update=True)
         except GithubAccessToken.DoesNotExist:
             pass
         # end of workaround
