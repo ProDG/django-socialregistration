@@ -134,7 +134,10 @@ class ProfileMixin(object):
             be saved to DB straight away
         :type save: bool
         """
-        profile = self.get_model()(user=user, **kwargs)
+        try:
+            profile = self.get_model().objects.get(user=user)
+        except self.get_model().DoesNotExist:
+            profile = self.get_model()(user=user, **kwargs)
 
         if save:
             profile.save()
